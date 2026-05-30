@@ -1,6 +1,6 @@
 "use client"
 
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -8,24 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Github, Globe, Play, Pause } from 'lucide-react'
 
-interface Technology {
-  name: string
-  icon?: string // URL to icon image
-}
-
-interface ProjectCardProps {
-  icon: string | React.ReactNode // URL or inline SVG
-  title: string
-  subtitle: string
-  technologies: Technology[]
-  description: string
-  preview: {
-    type: 'image' | 'video'
-    url: string
-  }
-  githubUrl: string
-  websiteUrl: string
-}
+import { ProjectType } from '@/types/projects'
 
 export default function ProjectCardItem({
   icon,
@@ -33,15 +16,16 @@ export default function ProjectCardItem({
   subtitle,
   technologies,
   description,
-  preview,
+  imgUrl,
+  videoUrl,
   githubUrl,
   websiteUrl
-}: ProjectCardProps) {
+}: ProjectType) {
   const [isHovered, setIsHovered] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
 
   return (
-    <Card 
+    <Card
       className="group overflow-hidden transition-all duration-300 hover:shadow-lg dark:hover:shadow-primary/25 hover:-translate-y-1"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -64,17 +48,20 @@ export default function ProjectCardItem({
       <CardContent className="p-4 md:p-6">
         <div className="mb-4 flex flex-wrap gap-2">
           {technologies.map((tech, index) => (
-            <Badge key={index} variant="secondary" className="text-xs">
-              {tech.icon && <Image src={tech.icon} alt={tech.name} width={16} height={16} className="mr-1" />}
-              {tech.name}
+            <Badge key={index} variant="secondary" className="text-xs flex items-center justify-center p-2">
+              {typeof tech === 'string' ? (
+                <Image src={tech} alt="technology icon" width={16} height={16} className="mr-1" />
+              ) : (
+                tech
+              )}
             </Badge>
           ))}
         </div>
         <p className="text-sm mb-4">{description}</p>
         <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md bg-muted">
-          {preview.type === 'image' ? (
+          {!videoUrl ? (
             <Image
-              src={preview.url}
+              src={imgUrl || "https://placehold.co/800x600"}
               alt={`${title} preview`}
               fill
               className="object-cover transition-all duration-300 group-hover:scale-105"
@@ -82,7 +69,7 @@ export default function ProjectCardItem({
           ) : (
             <div className="relative w-full h-full">
               <video
-                src={preview.url}
+                src={videoUrl}
                 loop
                 muted
                 playsInline
