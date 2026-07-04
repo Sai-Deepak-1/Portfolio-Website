@@ -45,18 +45,18 @@ export default function SkillsSection() {
     return (
         <section className="py-20 bg-background/50 overflow-hidden" id="skills">
             <div className="container mx-auto px-4 mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-center">My Arsenal</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-center">Skills</h2>
                 <p className="text-muted-foreground text-center mt-2 max-w-xl mx-auto">
                     Technologies and tools I use to build scalable, high-performance applications.
                 </p>
             </div>
 
             <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-                <Marquee pauseOnHover className="[--duration:40s]">
+                <Marquee pauseOnHover repeat={2} className="[--duration:40s]">
                     {skills.slice(0, Math.ceil(skills.length / 2)).map((skill, idx) => (
                         <div
                             key={idx}
-                            className="flex w-32 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-4 transition-all hover:bg-accent hover:border-border/80"
+                            className="group flex w-32 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-4 transition-all hover:bg-accent hover:border-border/80"
                         >
                             <div className="opacity-70 transition-opacity group-hover:opacity-100">{skill.icon}</div>
                             <span className="text-sm font-medium">{skill.name}</span>
@@ -64,11 +64,11 @@ export default function SkillsSection() {
                     ))}
                 </Marquee>
 
-                <Marquee reverse pauseOnHover className="[--duration:40s] mt-4">
+                <Marquee reverse pauseOnHover repeat={2} className="[--duration:40s] mt-4">
                     {skills.slice(Math.ceil(skills.length / 2)).map((skill, idx) => (
                         <div
                             key={idx}
-                            className="flex w-32 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-4 transition-all hover:bg-accent hover:border-border/80"
+                            className="group flex w-32 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-4 transition-all hover:bg-accent hover:border-border/80"
                         >
                             <div className="opacity-70 transition-opacity group-hover:opacity-100">{skill.icon}</div>
                             <span className="text-sm font-medium">{skill.name}</span>
