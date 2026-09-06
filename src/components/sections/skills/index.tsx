@@ -43,12 +43,10 @@ const skills = [
 
 export default function SkillsSection() {
     return (
-        <section className="py-20 bg-background/50 overflow-hidden" id="skills">
-            <div className="container mx-auto px-4 mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-center">Skills</h2>
-                <p className="text-muted-foreground text-center mt-2 max-w-xl mx-auto">
-                    Technologies and tools I use to build scalable, high-performance applications.
-                </p>
+        <section className="scroll-mt-24 overflow-hidden px-5 py-20 sm:px-10 lg:px-16 lg:py-28" id="skills">
+            <div className="mx-auto mb-12 grid max-w-7xl gap-5 border-b border-border pb-6 md:grid-cols-[0.7fr_1.3fr]">
+                <p className="eyebrow">02 / Toolkit</p>
+                <div><h2 className="text-4xl font-medium tracking-[-0.045em] sm:text-5xl">Technology, with intent.</h2><p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">Tools I use to build scalable, high-performance applications.</p></div>
             </div>
 
             <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
@@ -56,7 +54,7 @@ export default function SkillsSection() {
                     {skills.slice(0, Math.ceil(skills.length / 2)).map((skill, idx) => (
                         <div
                             key={idx}
-                            className="group flex w-32 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-4 transition-all hover:bg-accent hover:border-border/80"
+                            className="group flex w-36 flex-col items-center justify-center gap-3 border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:text-accent"
                         >
                             <div className="opacity-70 transition-opacity group-hover:opacity-100">{skill.icon}</div>
                             <span className="text-sm font-medium">{skill.name}</span>
@@ -68,7 +66,7 @@ export default function SkillsSection() {
                     {skills.slice(Math.ceil(skills.length / 2)).map((skill, idx) => (
                         <div
                             key={idx}
-                            className="group flex w-32 flex-col items-center justify-center gap-3 rounded-xl border bg-card p-4 transition-all hover:bg-accent hover:border-border/80"
+                            className="group flex w-36 flex-col items-center justify-center gap-3 border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:text-accent"
                         >
                             <div className="opacity-70 transition-opacity group-hover:opacity-100">{skill.icon}</div>
                             <span className="text-sm font-medium">{skill.name}</span>

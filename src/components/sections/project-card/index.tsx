@@ -1,23 +1,12 @@
-import React from 'react'
-import ProjectCardItem from './card'
-import { projects } from '@/data'
-import { FadeInStagger, FadeIn } from '@/components/shared/animations/FadeIn'
+import ProjectCardItem from "./card";
+import { projects } from "@/data";
+import { FadeIn, FadeInStagger } from "@/components/shared/animations/FadeIn";
 
-const ProjectCard = () => {
-    return (
-        <>
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="text-4xl font-bold mb-8 text-center" id="project-section">My Projects</h1>
-                <FadeInStagger className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {projects.map((project, index) => (
-                        <FadeIn key={index} className="h-full">
-                            <ProjectCardItem {...project} />
-                        </FadeIn>
-                    ))}
-                </FadeInStagger>
-            </div>
-        </>
-    )
+export default function ProjectCard() {
+  return <section id="projects" className="scroll-mt-24 px-5 py-20 sm:px-10 lg:px-16 lg:py-28">
+    <FadeInStagger className="mx-auto max-w-7xl">
+      <FadeIn><div className="mb-12 grid gap-5 border-b border-border pb-6 md:grid-cols-[0.7fr_1.3fr]"><p className="eyebrow">03 / Selected work</p><div><h2 className="text-4xl font-medium tracking-[-0.045em] sm:text-5xl">Projects that solve a real problem.</h2><p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">A focused selection of systems built across full-stack development, AI, and computer vision.</p></div></div></FadeIn>
+      <div className="border-t border-border">{projects.map((project, index) => <FadeIn key={project.title}><ProjectCardItem {...project} index={index + 1} /></FadeIn>)}</div>
+    </FadeInStagger>
+  </section>;
 }
-
-export default ProjectCard
