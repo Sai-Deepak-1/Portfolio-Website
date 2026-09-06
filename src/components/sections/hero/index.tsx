@@ -1,56 +1,18 @@
 import Link from "next/link";
-import React from 'react';
-import { ChevronRight } from "lucide-react";
-import AnimatedWords from "@/components/shared/animations/text-animations";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { monaSans } from "@/app/fonts/fonts";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { AnimatedGradient } from "@/components/shared/animated-gradient";
+import { FadeIn, FadeInStagger } from "@/components/shared/animations/FadeIn";
 
 export default function Hero() {
-    return (
-        <section
-            className="flex h-[80vh] w-full items-center justify-center py-0 sm:h-[90vh] md:h-[100vh] 3xl:h-[60vh]"
-        >
-            <AnimatedGradient/>
-            <div className="mx-auto lg:max-w-7xl w-full px-5 sm:px-10 md:px-12 lg:px-5">
-                <div
-                    className={`text-center flex flex-col items-center space-y-10 ${monaSans.className}`}
-                >
-                    <AnimatedWords
-                        title="SAI DEEPAK"
-                        style="inline-block overflow-hidden pt-1 -mr-4 sm:-mr-5 md:-mr-7 lg:-mr-9 -mb-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
-                    />
-                    <p className="text-xl text-gray-700 dark:text-gray-300 text-center max-w-xl mt-4">
-                        A Java Developer with a passion in building Web Development and ML DevOps.
-                    </p>
-                    <div className="mt-8 flex flex-col sm:flex-row gap-4">
-
-                        <Link
-                            className={cn(
-                                buttonVariants({ variant: "rainbow", size: "lg" }),
-                                "w-full gap-2 whitespace-nowrap",
-                            )}
-                            href="/resume"
-                        >
-                            <p>Download Resume</p>
-                        </Link>
-                        <Link
-                            className={cn(
-                                buttonVariants({
-                                    variant: "outline",
-                                    size: "lg",
-                                }),
-                                "group relative gap-2 w-full",
-                            )}
-                            href="/contact"
-                        >
-                            <span>Contact Me</span>
-                            <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 duration-300" />
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </section >
-    );
+  return <section id="top" className="relative flex min-h-screen items-end overflow-hidden px-5 pb-12 pt-32 sm:px-10 sm:pb-16 lg:px-16">
+    <div className="pointer-events-none absolute right-[5%] top-[18%] h-48 w-48 rounded-full bg-accent/10 blur-3xl dark:bg-accent/15" />
+    <FadeInStagger className="mx-auto w-full max-w-7xl">
+      <FadeIn><div className="mb-8 flex items-center justify-between border-y border-border py-3 eyebrow"><span>Software engineer</span><span>Hyderabad, India</span></div></FadeIn>
+      <FadeIn><h1 className={`${monaSans.className} max-w-6xl text-balance text-[clamp(4.5rem,12.5vw,11.5rem)] font-black uppercase leading-[0.76] tracking-[-0.075em]`}>Building<br /><span className="text-accent">useful</span> systems.</h1></FadeIn>
+      <FadeIn className="mt-12 grid gap-8 border-t border-border pt-5 md:grid-cols-[1fr_0.95fr] md:items-end">
+        <p className="max-w-md text-lg leading-relaxed text-muted-foreground">Sai Deepak is a software engineer focused on modern web experiences and scalable ML / DevOps systems.</p>
+        <div className="flex flex-wrap gap-3 md:justify-self-end"><Link href="#projects" className="group inline-flex items-center gap-3 bg-foreground px-5 py-3 text-sm font-medium text-background transition-transform hover:-translate-y-0.5">View selected work <ArrowDownRight className="size-4 transition-transform group-hover:translate-y-0.5" /></Link><Link href="https://github.com/Sai-Deepak-1" target="_blank" rel="noreferrer" className="group inline-flex items-center gap-3 border border-border px-5 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent">GitHub <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link></div>
+      </FadeIn>
+    </FadeInStagger>
+  </section>;
 }

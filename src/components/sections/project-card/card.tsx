@@ -1,133 +1,14 @@
-"use client"
+import { ArrowUpRight, Github } from "lucide-react";
+import { ProjectType } from "@/types/projects";
 
-import React,{ useState } from 'react'
-import Image from 'next/image'
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Github, Globe, Play, Pause } from 'lucide-react'
+type Props = ProjectType & { index: number };
 
-interface Technology {
-  name: string
-  icon?: string // URL to icon image
-}
-
-interface ProjectCardProps {
-  icon: string | React.ReactNode // URL or inline SVG
-  title: string
-  subtitle: string
-  technologies: Technology[]
-  description: string
-  preview: {
-    type: 'image' | 'video'
-    url: string
-  }
-  githubUrl: string
-  websiteUrl: string
-}
-
-export default function ProjectCardItem({
-  icon,
-  title,
-  subtitle,
-  technologies,
-  description,
-  preview,
-  githubUrl,
-  websiteUrl
-}: ProjectCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-
-  return (
-    <Card 
-      className="group overflow-hidden transition-all duration-300 hover:shadow-lg dark:hover:shadow-primary/25 hover:-translate-y-1"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <CardHeader className="p-4 md:p-6">
-        <div className="flex items-center space-x-4">
-          <div className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16">
-            {typeof icon === 'string' ? (
-              <Image src={icon} alt={title} width={64} height={64} className="rounded-full" />
-            ) : (
-              icon
-            )}
-          </div>
-          <div>
-            <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
-            <p className="text-sm text-muted-foreground">{subtitle}</p>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="p-4 md:p-6">
-        <div className="mb-4 flex flex-wrap gap-2">
-          {technologies.map((tech, index) => (
-            <Badge key={index} variant="secondary" className="text-xs">
-              {tech.icon && <Image src={tech.icon} alt={tech.name} width={16} height={16} className="mr-1" />}
-              {tech.name}
-            </Badge>
-          ))}
-        </div>
-        <p className="text-sm mb-4">{description}</p>
-        <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md bg-muted">
-          {preview.type === 'image' ? (
-            <Image
-              src={preview.url}
-              alt={`${title} preview`}
-              fill
-              className="object-cover transition-all duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="relative w-full h-full">
-              <video
-                src={preview.url}
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                ref={(el) => {
-                  if (el && isHovered) {
-                    el.play()
-                  } else if (el) {
-                    el.pause()
-                  }
-                }}
-              />
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => {
-                  const video = document.querySelector('video')
-                  if (video) {
-                    isPlaying ? video.pause() : video.play()
-                  }
-                }}
-              >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </Button>
-            </div>
-          )}
-        </AspectRatio>
-      </CardContent>
-      <CardFooter className="p-4 md:p-6 flex justify-between">
-        <Button variant="outline" size="sm" asChild>
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-            <Github className="mr-2 h-4 w-4" />
-            GitHub
-          </a>
-        </Button>
-        <Button variant="default" size="sm" asChild>
-          <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
-            <Globe className="mr-2 h-4 w-4" />
-            Visit Site
-          </a>
-        </Button>
-      </CardFooter>
-    </Card>
-  )
+export default function ProjectCardItem({ icon, title, subtitle, technologies, description, githubUrl, websiteUrl, index }: Props) {
+  return <article className="group grid gap-6 border-b border-border py-8 transition-colors sm:py-10 lg:grid-cols-[0.16fr_0.84fr] lg:gap-10">
+    <div className="flex items-start justify-between lg:block"><span className="font-mono text-xs tracking-[0.12em] text-muted-foreground">0{index}</span><div className="mt-0 text-2xl text-accent lg:mt-10" aria-hidden="true">{icon}</div></div>
+    <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr] lg:gap-10">
+      <div><p className="eyebrow mb-3">{subtitle}</p><h3 className="max-w-xl text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-4xl">{title}</h3><p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">{description}</p></div>
+      <div className="flex flex-col justify-between gap-6 border-t border-border pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0"><div><p className="eyebrow mb-3">Built with</p><div className="flex flex-wrap gap-2">{technologies.map((tech, technologyIndex) => <span key={technologyIndex} className="grid size-8 place-items-center border border-border text-sm text-muted-foreground transition-colors group-hover:border-accent/60 group-hover:text-foreground" aria-label="Technology used">{tech}</span>)}</div></div><div className="flex flex-wrap gap-4"><a href={githubUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium underline-offset-4 hover:text-accent hover:underline"><Github className="size-4" /> Source</a><a href={websiteUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium underline-offset-4 hover:text-accent hover:underline">Project <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a></div></div>
+    </div>
+  </article>;
 }

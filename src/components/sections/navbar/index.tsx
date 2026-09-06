@@ -1,68 +1,30 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { motion, LayoutGroup } from 'framer-motion'
-import { ModeToggle } from '@/components/shared/mode-toggle'
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { ModeToggle } from "@/components/shared/mode-toggle";
 
-const pages = [
-    'About', 
-    'Blog', 
-    'Projects', 
-    'Certifications', 
-    'Skills'
-]
+const links = [{ label: "About", href: "#about" }, { label: "Skills", href: "#skills" }, { label: "Projects", href: "#projects" }];
 
 export default function Navbar() {
-    const pathname = usePathname()
-    const [hovered, setHovered] = useState('')
-    return (
-        <LayoutGroup id="navbar">
-            <header className="fixed top-0 left-0 right-0 z-10 flex flex-wrap items-center justify-between bg-opacity-50 px-4 py-3 backdrop-blur-md">
-                <Link href="/" className="text-3xl font-bold text-black dark:text-white no-underline font-heading">
-                    SD
-                </Link>
-
-                <nav className="order-2 flex-1 basis-full md:order-none md:basis-auto">
-                    <ul className="flex flex-wrap justify-center space-x-2 sm:justify-end">
-                        {pages.map((page) => {
-                            const path = `/${page.toLowerCase()}`
-                            const isActive = pathname === path
-
-                            return (
-                                <li key={page}>
-                                    <Link href={path} className="relative border-0 hover:opacity-100 focus:opacity-100">
-                                        <motion.span
-                                            layout
-                                            className={`relative inline-block cursor-pointer p-2 text-xs font-medium uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors duration-300 hover:text-black dark:hover:text-white
-                        ${isActive ? 'text-black dark:text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-black dark:after:bg-white after:content-[""]' : ''}
-                      `}
-                                            onHoverStart={() => setHovered(page)}
-                                            onHoverEnd={() => setHovered('')}
-                                        >
-                                            {hovered === page && (
-                                                <motion.span
-                                                    layoutId="nav-hover"
-                                                    className="absolute inset-0 -z-10 rounded-md bg-gray-200 dark:bg-gray-700"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 0.5 }}
-                                                    exit={{ opacity: 0 }}
-                                                />
-                                            )}
-                                            {page}
-                                        </motion.span>
-                                    </Link>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </nav>
-
-                <aside className="ml-4">
-                    <ModeToggle />
-                </aside>
-            </header>
-        </LayoutGroup>
-    )
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("#about");
+  useEffect(() => {
+    const sections = links.map(({ href }) => document.querySelector(href)).filter(Boolean) as Element[];
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.find((entry) => entry.isIntersecting);
+      if (visible) setActive(`#${visible.target.id}`);
+    }, { rootMargin: "-35% 0px -55%" });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+  return <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6">
+    <div className="mx-auto flex max-w-7xl items-center justify-between border border-border/80 bg-background/85 px-4 py-3 shadow-[0_8px_30px_rgb(20_20_20/0.04)] backdrop-blur-md dark:shadow-black/20 sm:px-5">
+      <Link href="#top" aria-label="Sai Deepak — home" className="font-mono text-base font-semibold tracking-[-0.08em]">SD<span className="text-accent">.</span></Link>
+      <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">{links.map((link) => <Link key={link.href} href={link.href} className={`px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.14em] transition-colors ${active === link.href ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>{link.label}</Link>)}</nav>
+      <div className="flex items-center gap-1"><ModeToggle className="h-8 w-8" /><button type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)} className="grid h-8 w-8 place-items-center md:hidden">{open ? <X size={18} /> : <Menu size={18} />}</button></div>
+    </div>
+    {open && <nav className="mx-auto max-w-7xl border-x border-b border-border bg-background px-4 py-3 md:hidden" aria-label="Mobile navigation">{links.map((link) => <Link key={link.href} onClick={() => setOpen(false)} href={link.href} className="block border-b border-border py-3 font-mono text-xs uppercase tracking-[0.16em] last:border-0">{link.label}</Link>)}</nav>}
+  </header>;
 }
