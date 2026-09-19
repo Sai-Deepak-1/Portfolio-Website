@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sai Deepak Portfolio
 
-## Getting Started
+Personal portfolio site for Sai Deepak, built with Next.js App Router, TypeScript,
+Tailwind CSS, shadcn/ui, Framer Motion, and Lenis. The site is configured for a
+fully static export and can be deployed to Vercel or another static host.
 
-First, run the development server:
+## Requirements
+
+- Node.js 20 or newer
+- npm
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000> to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+`npm run build` generates the static site in `out/`.
 
-To learn more about Next.js, take a look at the following resources:
+## Where to edit content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Most editable portfolio content is centralized in
+[`src/data/index.tsx`](./src/data/index.tsx):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Personal bio, contact email, and social links
+- Project details and links
+- Skills and technology icons
+- Certifications, blog placeholders, and marquee items
 
-## Deploy on Vercel
+Replace every `[TODO: ...]` value before publishing. Add the real resume as
+[`public/resume.pdf`](./public/resume.pdf); the home page download link already
+points there. The Blog and Certifications pages are intentionally minimal and
+can be removed from `src/data/index.tsx` and the navigation if they are not
+needed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Environment variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Copy [`.env.example`](./.env.example) to `.env.local`:
+
+- `NEXT_PUBLIC_SITE_URL` - public canonical site URL used by SEO metadata,
+  sitemap, and robots.txt.
+- `NEXT_PUBLIC_FORMSPREE_ENDPOINT` - the Formspree endpoint that receives the
+  static contact form.
+
+These are public values. Do not put private API keys or secrets in this
+repository.
+
+## Deployment
+
+### Vercel
+
+Import the repository into Vercel, set the two environment variables above,
+and use the default Next.js build settings. The `output: "export"` setting
+produces a static deployment.
+
+### Other static hosts
+
+Run `npm run build` and publish the generated `out/` directory. Configure the
+host to serve `404.html` for unknown routes if it does not automatically
+support static fallback pages.

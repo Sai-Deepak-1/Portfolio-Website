@@ -2,24 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -93,7 +75,19 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans), sans-serif;
   }
+}
+
+@layer utilities {
+  .page-shell {
+    @apply mx-auto min-h-[calc(100vh-4rem)] w-full max-w-7xl px-5 pb-20 pt-32 sm:px-10 md:px-12 md:pt-28 lg:px-5;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 3px;
 }
 
 .scroll-smooth {
@@ -113,7 +107,7 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
-lenis.lenis-stopped {
+.lenis.lenis-stopped {
   overflow: hidden;
 }
 

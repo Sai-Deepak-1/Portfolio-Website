@@ -1,133 +1,70 @@
-"use client"
+"use client";
 
-import React,{ useState } from 'react'
-import Image from 'next/image'
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Github, Globe, Play, Pause } from 'lucide-react'
+import Image from "next/image";
+import { Github, Globe } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import type { ProjectType } from "@/types/projects";
 
-interface Technology {
-  name: string
-  icon?: string // URL to icon image
-}
+type ProjectCardProps = {
+  project: ProjectType;
+};
 
-interface ProjectCardProps {
-  icon: string | React.ReactNode // URL or inline SVG
-  title: string
-  subtitle: string
-  technologies: Technology[]
-  description: string
-  preview: {
-    type: 'image' | 'video'
-    url: string
-  }
-  githubUrl: string
-  websiteUrl: string
-}
-
-export default function ProjectCardItem({
-  icon,
-  title,
-  subtitle,
-  technologies,
-  description,
-  preview,
-  githubUrl,
-  websiteUrl
-}: ProjectCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
+export default function ProjectCardItem({ project }: ProjectCardProps) {
+  const hasWebsite = project.websiteUrl && project.websiteUrl !== project.githubUrl;
 
   return (
-    <Card 
-      className="group overflow-hidden transition-all duration-300 hover:shadow-lg dark:hover:shadow-primary/25 hover:-translate-y-1"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <CardHeader className="p-4 md:p-6">
-        <div className="flex items-center space-x-4">
-          <div className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16">
-            {typeof icon === 'string' ? (
-              <Image src={icon} alt={title} width={64} height={64} className="rounded-full" />
-            ) : (
-              icon
-            )}
+    <Card className="group flex h-full flex-col overflow-hidden transition-transform duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-lg motion-safe:dark:hover:shadow-primary/25">
+      <CardHeader className="space-y-4 p-5">
+        <div className="flex items-start gap-4">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-muted text-2xl [&>svg]:size-7">
+            {project.icon}
           </div>
           <div>
-            <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
-            <p className="text-sm text-muted-foreground">{subtitle}</p>
+            <h2 className="text-lg font-semibold leading-tight">{project.title}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{project.subtitle}</p>
           </div>
         </div>
+        <div className="relative aspect-video overflow-hidden rounded-md bg-muted">
+          <Image
+            src={project.imgUrl}
+            alt={`Placeholder preview for ${project.title}`}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-300 motion-safe:group-hover:scale-105"
+          />
+        </div>
       </CardHeader>
-      <CardContent className="p-4 md:p-6">
-        <div className="mb-4 flex flex-wrap gap-2">
-          {technologies.map((tech, index) => (
-            <Badge key={index} variant="secondary" className="text-xs">
-              {tech.icon && <Image src={tech.icon} alt={tech.name} width={16} height={16} className="mr-1" />}
-              {tech.name}
+      <CardContent className="flex flex-1 flex-col gap-4 px-5 pb-5">
+        <div className="flex flex-wrap gap-2">
+          {project.technologies.map((technology) => (
+            <Badge key={technology.name} variant="secondary" className="gap-1.5">
+              <span className="[&>svg]:size-3.5" aria-hidden="true">
+                {technology.icon}
+              </span>
+              {technology.name}
             </Badge>
           ))}
         </div>
-        <p className="text-sm mb-4">{description}</p>
-        <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md bg-muted">
-          {preview.type === 'image' ? (
-            <Image
-              src={preview.url}
-              alt={`${title} preview`}
-              fill
-              className="object-cover transition-all duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="relative w-full h-full">
-              <video
-                src={preview.url}
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                ref={(el) => {
-                  if (el && isHovered) {
-                    el.play()
-                  } else if (el) {
-                    el.pause()
-                  }
-                }}
-              />
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => {
-                  const video = document.querySelector('video')
-                  if (video) {
-                    isPlaying ? video.pause() : video.play()
-                  }
-                }}
-              >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </Button>
-            </div>
-          )}
-        </AspectRatio>
+        <p className="text-sm leading-6 text-muted-foreground">{project.description}</p>
       </CardContent>
-      <CardFooter className="p-4 md:p-6 flex justify-between">
+      <CardFooter className="gap-3 p-5 pt-0">
         <Button variant="outline" size="sm" asChild>
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-            <Github className="mr-2 h-4 w-4" />
-            GitHub
+          <a href={project.githubUrl} target="_blank" rel="noreferrer">
+            <Github className="mr-2 size-4" aria-hidden="true" />
+            View source
           </a>
         </Button>
-        <Button variant="default" size="sm" asChild>
-          <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
-            <Globe className="mr-2 h-4 w-4" />
-            Visit Site
-          </a>
-        </Button>
+        {hasWebsite ? (
+          <Button size="sm" asChild>
+            <a href={project.websiteUrl} target="_blank" rel="noreferrer">
+              <Globe className="mr-2 size-4" aria-hidden="true" />
+              Visit site
+            </a>
+          </Button>
+        ) : null}
       </CardFooter>
     </Card>
-  )
+  );
 }

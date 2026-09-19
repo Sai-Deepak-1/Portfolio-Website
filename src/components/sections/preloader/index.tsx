@@ -1,7 +1,7 @@
 'use client';
 import styles from './style.module.scss';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { opacity, slideUp } from './anim';
 
 const words = [
@@ -23,19 +23,25 @@ const words = [
   ];
 
 export default function Index() {
+    const reduceMotion = useReducedMotion();
     const [index, setIndex] = useState(0);
     const [dimension, setDimension] = useState({width: 0, height:0});
 
     useEffect( () => {
-        setDimension({width: window.innerWidth, height: window.innerHeight})
+        const frame = window.requestAnimationFrame(() => {
+            setDimension({width: window.innerWidth, height: window.innerHeight})
+        });
+        return () => window.cancelAnimationFrame(frame);
     }, [])
 
     useEffect( () => {
+        if (reduceMotion) return;
         if(index == words.length - 1) return;
-        setTimeout( () => {
+        const timer = setTimeout( () => {
             setIndex(index + 1)
         }, index == 0 ? 1000 : 150)
-    }, [index])
+        return () => clearTimeout(timer)
+    }, [index, reduceMotion])
 
     const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height + 300} 0 ${dimension.height}  L0 0`
     const targetPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height} 0 ${dimension.height}  L0 0`
@@ -50,6 +56,8 @@ export default function Index() {
             transition: {duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.3}
         }
     }
+
+    if (reduceMotion) return null;
 
     return (
         <motion.div variants={slideUp} initial="initial" exit="exit" className={styles.introduction}>
