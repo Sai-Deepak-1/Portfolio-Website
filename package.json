@@ -32,6 +32,7 @@
     "@types/node": "^22",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18",
+    "baseline-browser-mapping": "^2.11.28",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.0.3",
     "framer-motion": "^11.5.6",

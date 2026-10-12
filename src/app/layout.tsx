@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { monaSans } from "./fonts/fonts";
 import { SiteChrome } from "@/components/portfolio/site-chrome";
 import { SiteFooter } from "@/components/portfolio/site-footer";
 
@@ -44,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${monaSans.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <SiteChrome />
         {children}
         <SiteFooter />
