@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, Command, Menu, Search, X } from "lucide-react";
 import { navigation, portfolioProjects } from "@/data/portfolio";
 
@@ -18,15 +18,23 @@ export function SiteChrome() {
   const [scrolled, setScrolled] = useState(false);
   const [preview, setPreview] = useState("grid");
   const modalRef = useRef<HTMLElement>(null);
+  const close = useCallback(() => {
+    setQuery("");
+    setModal(null);
+  }, []);
+  const openPalette = useCallback(() => {
+    setQuery("");
+    setModal("palette");
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setModal("palette");
+        openPalette();
       }
-      if (event.key === "Escape") setModal(null);
+      if (event.key === "Escape") close();
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -35,11 +43,10 @@ export function SiteChrome() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [close, openPalette]);
 
   useEffect(() => {
     document.body.classList.toggle("scroll-lock", modal !== null);
-    if (!modal) setQuery("");
     return () => document.body.classList.remove("scroll-lock");
   }, [modal]);
 
@@ -56,10 +63,6 @@ export function SiteChrome() {
       `${item.label} ${item.kind}`.toLowerCase().includes(needle),
     );
   }, [query]);
-
-  function close() {
-    setModal(null);
-  }
 
   function trapFocus(event: KeyboardEvent<HTMLElement>) {
     if (event.key !== "Tab") return;
@@ -105,7 +108,7 @@ export function SiteChrome() {
             ))}
           </nav>
           <div className="header-actions">
-            <button className="search-trigger" type="button" onClick={() => setModal("palette")}>
+            <button className="search-trigger" type="button" onClick={openPalette}>
               <Search aria-hidden="true" size={18} strokeWidth={1.8} />
               <span>Search or jump</span>
               <kbd aria-hidden="true"><Command size={12} />K</kbd>
@@ -165,7 +168,7 @@ export function SiteChrome() {
                 <span className="menu-preview__card">01</span>
               </div>
             </div>
-            <button className="menu-search" type="button" onClick={() => setModal("palette")}>
+            <button className="menu-search" type="button" onClick={openPalette}>
               <Search aria-hidden="true" size={18} /> Search or jump to a page <kbd>⌘ K</kbd>
             </button>
           </div>

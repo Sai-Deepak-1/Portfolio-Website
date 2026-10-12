@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio.example"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio.example"),
   title: {
     default: "[PLACEHOLDER] Portfolio",
     template: "%s | [PLACEHOLDER] Portfolio",

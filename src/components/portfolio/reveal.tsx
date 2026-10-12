@@ -8,10 +8,7 @@ export function Reveal({ children, className = "" }: { children: ReactNode; clas
 
   useEffect(() => {
     const element = ref.current;
-    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(true);
-      return;
-    }
+    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setVisible(true);
