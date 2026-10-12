@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 
 export const monaSans = localFont({
+  variable: "--font-display",
   src: [
     {
       path: "./Mona-Sans-BlackNarrow.woff2",
